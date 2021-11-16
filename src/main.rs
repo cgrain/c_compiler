@@ -1,6 +1,6 @@
 mod lexer;
 
-// This file tests basic testing and ensures that all files are included in the build. This makes sure that everything is always tested. 
+// This file tests basic testing and ensures that all files are included in the build. This makes sure that everything is always tested.
 
 fn main() {
     println!("Hello, world!");
@@ -8,13 +8,6 @@ fn main() {
     let b = crate::compiler::return_2();
     println!("{}", b);
 }
-
-
-
-
-
-
-
 
 
 
@@ -29,6 +22,16 @@ mod tests {
         assert_eq!(crate::compiler::return_2(), 2)
     }
 }
-The following tokens are recognized by the preprocessor when they are used outside the context of a preprocessor directive:
+
+
+
+
+mod compiler { 
+    pub fn return_2() -> i32{ 
+        2
+    }
+
+
+}
 
 
