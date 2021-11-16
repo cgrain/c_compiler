@@ -7,6 +7,7 @@ fn main() {
     println!("Hi");
     let b = crate::compiler::return_2();
     println!("{}", b);
+    let _c = crate::lexer::lex_string("Hello World");
 }
 
 
