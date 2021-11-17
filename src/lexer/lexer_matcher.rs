@@ -106,6 +106,8 @@ fn get_keyword_token_type(s: &str) -> TokenType  {
 pub fn is_whitespace(s: &str) -> bool {
     match s {
         " " => return true,
+        "\t" => return true,
+        "\n" => return true,
         _ => return false,
     }
 }
@@ -203,6 +205,17 @@ mod valid_whitespace {
         let test = " ";
         assert_eq!(is_whitespace(test), true);
     }
+    #[test]
+    fn test_tab() { 
+        let test = "\t";
+        assert_eq!(is_whitespace(test), true);
+    }
+    #[test]
+    fn test_newline() { 
+        let test = "\n";
+        assert_eq!(is_whitespace(test), true);
+    }
+    
 }
 #[cfg(test)]
 mod invalid_whitespace {
