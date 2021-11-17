@@ -1,5 +1,5 @@
 mod lexer;
-
+mod parser;
 // This file tests basic testing and ensures that all files are included in the build. This makes sure that everything is always tested.
 
 fn main() {

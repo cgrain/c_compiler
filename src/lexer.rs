@@ -1,5 +1,5 @@
 mod lexer_matcher;
-mod lexer_types;
+pub mod lexer_types;
 use lexer_matcher::*;
 use lexer_types::*;
 
