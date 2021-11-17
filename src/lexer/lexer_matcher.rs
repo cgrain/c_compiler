@@ -178,6 +178,7 @@ mod valid_ident {
     }
 
 }
+#[cfg(test)]
 mod valid_decimal {
     use super::*;
     #[test]
