@@ -114,4 +114,48 @@ pub fn is_whitespace(s: &str) -> bool {
 #[cfg(test)]
 mod valid_keyword {
     use super::*;
+    #[test]
+    fn test_return() {
+        assert_eq!(is_keyword("return"), true);
+    }
+    #[test]
+    fn test_int() {
+        assert_eq!(is_keyword("int"), true);
+    }
+    #[test]
+    fn test_open_brace() {
+        assert_eq!(is_keyword("{"), true);
+    }
+    #[test]
+    fn test_close_brace() {
+        assert_eq!(is_keyword("}"), true);
+    }
+    #[test]
+    fn test_open_parenthesis() {
+        assert_eq!(is_keyword("("), true);
+    }
+    #[test]
+    fn test_close_parenthesis() {
+        assert_eq!(is_keyword(")"), true);
+    }
+    #[test]
+    fn test_semicolon() {
+        assert_eq!(is_keyword(";"), true);
+    }
 } 
+#[cfg(test)]
+mod invalid_keyword {
+    use super::*;
+    #[test]
+    fn test_ident() {
+        assert_eq!(is_keyword("ident"), false);
+    }
+    #[test]
+    fn test_decimal() {
+        assert_eq!(is_keyword("decimal"), false);
+    }
+    #[test]
+    fn test_whitespace() {
+        assert_eq!(is_keyword(" "), false);
+    }
+}
