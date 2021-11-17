@@ -162,4 +162,111 @@ mod invalid_keyword {
 #[cfg(test)]
 mod valid_ident {
     use super::*;
+    #[test]
+    #[allow(non_snake_case)]
+    fn test_azAZ() { 
+        let test = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        assert_eq!(is_ident(test), true);
+    }
+    #[test]
+    #[allow(non_snake_case)]
+    fn test_0_9() { 
+        let test = "a0123456789";
+        assert_eq!(is_ident(test), true);
+    }
+
+}
+mod valid_decimal {
+    use super::*;
+    #[test]
+    fn test_0_9() { 
+        let test = "0.123456789";
+        assert_eq!(is_literal_decimal(test), true);
+    }
+    #[test]
+    fn test_two_dots() { 
+        let test = "0.123456789.";
+        assert_eq!(is_literal_decimal(test), false);
+    }
+    #[test]
+    fn no_letters() { 
+        let test = "0.123456789a";
+        assert_eq!(is_literal_decimal(test), false);
+    }
+}
+
+#[cfg(test)]
+mod valid_whitespace {
+    use super::*;
+    #[test]
+    fn test_whitespace() { 
+        let test = " ";
+        assert_eq!(is_whitespace(test), true);
+    }
+}
+#[cfg(test)]
+mod invalid_whitespace {
+    use super::*;
+    #[test]
+    fn test_whitespace() { 
+        let test = "a";
+        assert_eq!(is_whitespace(test), false);
+    }
+}
+#[cfg(test)]
+mod get_ident_token {
+    use super::*;
+    #[test]
+    fn test_ident() {
+        let test = "ident";
+        assert_eq!(get_token(test), Token { token_type: TokenType::Identifier, name: Some("ident".to_string()), value: None });
+    }
+}
+#[cfg(test)]
+mod get_decimal_token {
+    use super::*;
+    #[test]
+    fn test_decimal() {
+        let test = "0.123456789";
+        assert_eq!(get_token(test), Token { token_type: TokenType::IntegerLiteral, name: None, value: Some("0.123456789".to_string()) });
+    }
+}
+#[cfg(test)]
+mod get_keyword_token {
+    use super::*;
+    #[test]
+    fn test_return() {
+        let test = "return";
+        assert_eq!(get_token(test), Token { token_type: TokenType::Return, name: None, value: None });
+    }
+    #[test]
+    fn test_int() {
+        let test = "int";
+        assert_eq!(get_token(test), Token { token_type: TokenType::Int, name: None, value: None });
+    }
+    #[test]
+    fn test_open_brace() {
+        let test = "{";
+        assert_eq!(get_token(test), Token { token_type: TokenType::OpenBrace, name: None, value: None });
+    }
+    #[test]
+    fn test_close_brace() {
+        let test = "}";
+        assert_eq!(get_token(test), Token { token_type: TokenType::CloseBrace, name: None, value: None });
+    }
+    #[test]
+    fn test_open_parenthesis() {
+        let test = "(";
+        assert_eq!(get_token(test), Token { token_type: TokenType::OpenParenthesis, name: None, value: None });
+    }
+    #[test]
+    fn test_close_parenthesis() {
+        let test = ")";
+        assert_eq!(get_token(test), Token { token_type: TokenType::CloseParenthesis, name: None, value: None });
+    }
+    #[test]
+    fn test_semicolon() {
+        let test = ";";
+        assert_eq!(get_token(test), Token { token_type: TokenType::Semicolon, name: None, value: None });
+    }
 }
