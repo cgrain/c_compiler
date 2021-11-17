@@ -1,5 +1,5 @@
 # c_compiler
-A study project to learn more abour Rust, C, Assembly and compilers.
+A study project to learn more about Rust, C, Assembly and compilers.
 
 TODO"s: 
  - [ ] Add a README.md file 
