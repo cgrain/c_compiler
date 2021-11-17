@@ -2,6 +2,7 @@
 pub enum NodeKind { 
     Program,
     Function, 
+    Block,
     Statement,
     Expression,
     Type,

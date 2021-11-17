@@ -1,5 +1,4 @@
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(PartialEq, Debug, Clone)]
 pub enum TokenType {
     OpenBrace,
     CloseBrace,
@@ -13,8 +12,7 @@ pub enum TokenType {
     WhiteSpace,
 }
 
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(PartialEq, Debug, Clone)]
 pub struct Token {
     pub token_type: TokenType,
     pub name: Option<String>, 
