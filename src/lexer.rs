@@ -2,10 +2,6 @@ mod lexer_matcher;
 mod lexer_types;
 use lexer_matcher::*;
 use lexer_types::*;
-pub fn return_5() -> i32 {
-    println!("I am the Lexer");
-    5
-}
 
 
 pub fn lex_string(s: &str) -> Vec<Token> {
@@ -36,19 +32,21 @@ pub fn lex_string_inner(s: &str) -> (Token, String) {
             return (
                 Token {
                     token_type: TokenType::WhiteSpace,
+                    value: None,
+                    name: None,
                 },
                 s_to_go,
             );
         }
-        if !is_valid_token(&s2) {
+        if !is_token2(&s2) {
             s2.pop();
-            let token = get_token(&s2);
+            let token = get_token2(&s2);
             let s_return = s.replacen(&s2, "", 1);
             return (token, s_return);
         }
     }
 
-    return (get_token(&s2), "".to_string());
+    return (get_token2(&s2), "".to_string());
 }
 
 
@@ -75,7 +73,7 @@ mod tests {
             assert_eq!(tokens.len(), 3);
             assert_eq!(tokens[0].token_type, TokenType::Return);
             assert_eq!(tokens[1].token_type, TokenType::IntegerLiteral);
-            assert_eq!(tokens[2].token_type, TokenType::SemiColon);
+            assert_eq!(tokens[2].token_type, TokenType::Semicolon);
         }
     }
 }

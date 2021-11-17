@@ -5,7 +5,7 @@ pub enum TokenType {
     CloseBrace,
     OpenParenthesis,
     CloseParenthesis,
-    SemiColon,
+    Semicolon,
     Int,
     Return,
     Identifier,
@@ -16,4 +16,6 @@ pub enum TokenType {
 #[derive(PartialEq)]
 pub struct Token {
     pub token_type: TokenType,
+    pub name: Option<String>, 
+    pub value: Option<String>,
 }
