@@ -38,15 +38,15 @@ pub fn lex_string_inner(s: &str) -> (Token, String) {
                 s_to_go,
             );
         }
-        if !is_token2(&s2) {
+        if !is_token(&s2) {
             s2.pop();
-            let token = get_token2(&s2);
+            let token = get_token(&s2);
             let s_return = s.replacen(&s2, "", 1);
             return (token, s_return);
         }
     }
 
-    return (get_token2(&s2), "".to_string());
+    return (get_token(&s2), "".to_string());
 }
 
 

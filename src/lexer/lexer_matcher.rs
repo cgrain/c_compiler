@@ -1,7 +1,7 @@
 use super::lexer_types::*;
 
-pub fn is_token2(s: &str) -> bool {
-    return is_keyword(s) || is_ident_2(s) || is_literal_decimal(s) || is_comment(s)
+pub fn is_token(s: &str) -> bool {
+    return is_keyword(s) || is_ident(s) || is_literal_decimal(s) || is_comment(s)
 }
 
 
@@ -23,7 +23,7 @@ pub fn is_keyword(s: &str) -> bool {
 } 
 
 
-fn is_ident_2(s: &str) -> bool {
+fn is_ident(s: &str) -> bool {
     if is_keyword(s) {
         return false;
     }
@@ -65,8 +65,8 @@ fn is_comment(_s: &str) -> bool {
 }
 
 
-pub fn get_token2(s: &str) -> Token {
-    if is_ident_2(s) {
+pub fn get_token(s: &str) -> Token {
+    if is_ident(s) {
         // return Token::Ident(s.to_string());
         return Token { token_type: TokenType::Identifier, name: Some(s.to_string()), value: None };
     }
@@ -158,4 +158,8 @@ mod invalid_keyword {
     fn test_whitespace() {
         assert_eq!(is_keyword(" "), false);
     }
+}
+#[cfg(test)]
+mod valid_ident {
+    use super::*;
 }
