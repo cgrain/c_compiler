@@ -28,15 +28,18 @@ pub fn lex_string(s: &str) -> Vec<Token> {
     return tokens;
 }
 
+pub fn lex_string_2(s: &str, tokens: &mut Vec<Token>) -> &str { 
+ ""
+}
+
 pub fn lex_string_recursive(s: &str, tokens: &mut Vec<Token>) {
     let mut s2 = String::new();
-    println!("STARTING IN RECURSIVE");
     for c in s.chars() {
         s2.push(c);
-        println!("{}", s2);
         if is_whitespace(&s2) { 
             let s_to_go = s.replacen(&s2, "",1);
             lex_string_recursive(&s_to_go, tokens);
+            s2 = "".to_string();
             break;
         }
         if ! is_valid_token(&s2) {
@@ -44,7 +47,7 @@ pub fn lex_string_recursive(s: &str, tokens: &mut Vec<Token>) {
                 
             }
             s2.pop();
-            println!("{}", s2);
+            println!("TOKEN: {}", s2);
             println!("COMPLETE STRING: {}", s);
             let token = get_token(&s2);
             let s_to_go = s.replacen(&s2, "",1);
@@ -58,7 +61,8 @@ pub fn lex_string_recursive(s: &str, tokens: &mut Vec<Token>) {
     }
     println!("ENDING LOOP");
     let final_token = get_token(&s2);
-    if final_token.token_type != TokenType::WhiteSpace { 
+    if final_token.token_type != TokenType::WhiteSpace && s2 != "" { 
+        println!("FINAL TOKEN: {}", s2);
         tokens.push(final_token);
     }
     // return Token { token_type: TokenType::OpenBrace }
@@ -69,18 +73,23 @@ fn is_valid_token(s: &str) -> bool {
         return true;
     }
     if is_a_keyword(s) { 
-        return false;
+        return true;
     }
     match s { 
         " " => return false,
-        _ => return true,
+        _ => return false,
     }
 }
 fn is_valid_identifier(s: &str) -> bool { 
     if is_a_keyword(s) { 
         return false; 
     }
-
+    for c in s.chars() { 
+        if ! is_valid_ident_char(c) {
+            println!("WHADDUP");
+            return false;
+        }
+    }
     println!("{}", s);
     match s { 
         "{" => return false,
@@ -88,9 +97,17 @@ fn is_valid_identifier(s: &str) -> bool {
         _ => return true, 
     }
 }
+fn is_valid_ident_char(c: char) -> bool { 
+    match c { 
+        'a'..='z' => return true, 
+        'A'..='Z' => return true,
+        '0'..='9' => return true, 
+        _ => return false,
+    }
+}
 fn is_whitespace(s: &str) -> bool { 
     match s { 
-        " " => return true, 
+        " " => return true,
         _ => return false, 
     }
 }
@@ -101,7 +118,7 @@ fn get_token(s: &str) -> Token {
 }
 fn is_a_keyword(s: &str) -> bool {
     match s {
-        "return " => true,
+        "return" => true,
         _ => false,
     }
 }
