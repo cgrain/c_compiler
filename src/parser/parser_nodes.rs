@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-enum NodeKind { 
+pub enum NodeKind { 
     Program,
     Function, 
     Statement,
@@ -16,10 +16,10 @@ enum NodeKind {
 
 }
 
-#[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
-struct Node {
-    kind: NodeKind,
-    parent: Option<Node>,
-    children: Vec<Node>,
+#[derive(Clone, PartialEq, Eq, Hash, Debug)]
+pub struct Node {
+    pub kind: NodeKind,
+    pub  parent: Option<Box<Node>>,
+    pub children: Vec<Node>,
 
 }
