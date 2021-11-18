@@ -1,8 +1,11 @@
+#[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum NodeKind { 
     Program,
     Function, 
+    FunctionHeader,
     Block,
+    StatementList,
     Statement,
     Expression,
     Type,

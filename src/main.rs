@@ -5,6 +5,7 @@ mod parser;
 fn main() {
     println!("Hello, world!");
     println!("Hi");
-    let _c = crate::lexer::lex_string("return Hello return World");
+    let tokens = crate::lexer::lex_string("int main() { return 1; }");
+    let _parsed = crate::parser::parse(&tokens);
 }
 
