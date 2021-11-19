@@ -1,7 +1,6 @@
 use super::parser_nodes::*;
 use crate::lexer::lexer_types::*;
 
-
 fn match_token(token_list: &[Token], match_token_type: TokenType) -> bool {
     match token_list.get(0) {
         Some(Token { token_type: tt, .. }) => tt == &match_token_type,
@@ -9,11 +8,10 @@ fn match_token(token_list: &[Token], match_token_type: TokenType) -> bool {
     }
 }
 
-
 fn parse_expression(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     // <Expression> := int
-    if match_token(token_list, TokenType::IntegerLiteral) { 
-        return(
+    if match_token(token_list, TokenType::IntegerLiteral) {
+        return (
             Some(Node {
                 kind: NodeKind::Expression,
                 parent: None,
@@ -22,8 +20,7 @@ fn parse_expression(token_list: &[Token]) -> (Option<Node>, &[Token]) {
             }),
             &token_list[1..],
         );
-    }
-    else { 
+    } else {
         return (None, token_list);
     }
 }
@@ -58,14 +55,13 @@ fn parse_statement_list(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     // <StatementList> := <Statement> <StatementList>
     let mut statement_list = vec![];
     let mut token_list_cont = token_list;
-    loop { 
+    loop {
         let (statement, token_return) = parse_statement(token_list_cont);
         if statement == None {
             break;
         }
         token_list_cont = token_return;
         statement_list.push(statement.unwrap());
-
     }
     return (
         Some(Node {
@@ -105,7 +101,6 @@ fn parse_block(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     );
 }
 
-
 fn parse_parameter_list(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     // TODO
     return (None, &token_list);
@@ -122,17 +117,21 @@ fn parse_function_header(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     if !match_token(&token_list[2..], TokenType::OpenParenthesis) {
         return (None, token_list);
     }
+    let (identifier, _) = parse_identifier(&token_list[1..]);
+    let ident_unwrap = identifier.unwrap();
     let (_parameter_list, token_list_ret) = parse_parameter_list(&token_list[3..]);
     if !match_token(token_list_ret, TokenType::CloseParenthesis) {
         return (None, token_list);
     }
-    return ( Some(Node { 
-        kind: NodeKind::FunctionHeader,
-        parent: None,
-        children: vec![],
-        value: None,
-    }), &token_list_ret[1..]);
-
+    return (
+        Some(Node {
+            kind: NodeKind::FunctionHeader,
+            parent: None,
+            children: vec![ident_unwrap],
+            value: None,
+        }),
+        &token_list_ret[1..],
+    );
 }
 fn parse_function(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     // <Function> := <FunctionHeader> <Block>
@@ -156,17 +155,37 @@ fn parse_function(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     );
 }
 
+fn parse_identifier(token_list: &[Token]) -> (Option<Node>, &[Token]) {
+    // <Identifier> := <Identifier>
+    if !match_token(token_list, TokenType::Identifier) {
+        println!("Error: Expected identifier");
+        return (None, token_list);
+    }
+    return (
+        Some(Node {
+            kind: NodeKind::Identifier,
+            parent: None,
+            children: vec![],
+            value: token_list.get(0).unwrap().value.clone(),
+        }),
+        &token_list[1..],
+    );
+}
+
 #[allow(unused)]
 fn parse_class(_token_list: &[Token]) -> (Option<Node>, &[Token]) {
     todo!();
 }
 pub fn parse_program(token_list: &[Token]) -> Option<Node> {
     let (node, _tokens) = parse_function(token_list);
-    return node 
+    return node;
 }
 #[allow(unused)]
 fn equal_nodes(node1: &Node, node2: &Node) -> bool {
-    if node1.kind == node2.kind && node1.children.len() == node2.children.len() && node1.value == node2.value {
+    if node1.kind == node2.kind
+        && node1.children.len() == node2.children.len()
+        && node1.value == node2.value
+    {
         for i in 0..node1.children.len() {
             if !equal_nodes(&node1.children[i], &node2.children[i]) {
                 return false;
@@ -267,11 +286,11 @@ mod invalid_statements {
 }
 
 #[cfg(test)]
-mod valid_function_header { 
+mod valid_function_header {
     use super::*;
     #[test]
-    fn valid_function_header() { 
-        let tokenlist = vec![ 
+    fn valid_function_header() {
+        let tokenlist = vec![
             Token {
                 token_type: TokenType::Int,
                 value: Some("int".to_string()),
@@ -300,7 +319,12 @@ mod valid_function_header {
                 &Node {
                     kind: NodeKind::FunctionHeader,
                     value: None,
-                    children: vec![],
+                    children: vec![Node {
+                        kind: NodeKind::Identifier,
+                        value: Some("main".to_string()),
+                        children: vec![],
+                        parent: None
+                    },],
                     parent: None
                 }
             ),
@@ -312,8 +336,8 @@ mod valid_function_header {
 mod valid_function {
     use super::*;
     #[test]
-    fn valid_block() { 
-        let tokenlist = vec![ 
+    fn valid_block() {
+        let tokenlist = vec![
             Token {
                 token_type: TokenType::OpenBrace,
                 value: Some("{".to_string()),
@@ -332,14 +356,12 @@ mod valid_function {
                 &Node {
                     kind: NodeKind::Block,
                     value: None,
-                    children: vec![
-                        Node {
-                            kind: NodeKind::StatementList,
-                            value: None,
-                            children: vec![],
-                            parent: None
-                        }
-                    ],
+                    children: vec![Node {
+                        kind: NodeKind::StatementList,
+                        value: None,
+                        children: vec![],
+                        parent: None
+                    }],
                     parent: None
                 }
             ),
@@ -391,20 +413,23 @@ mod valid_function {
                         Node {
                             kind: NodeKind::FunctionHeader,
                             value: None,
-                            children: vec![],
+                            children: vec![Node {
+                                kind: NodeKind::Identifier,
+                                value: Some("main".to_string()),
+                                children: vec![],
+                                parent: None
+                            },],
                             parent: None
                         },
                         Node {
                             kind: NodeKind::Block,
                             value: None,
-                            children: vec![
-                                Node {
-                                    kind: NodeKind::StatementList,
-                                    value: None,
-                                    children: vec![],
-                                    parent: None
-                                }
-                            ],
+                            children: vec![Node {
+                                kind: NodeKind::StatementList,
+                                value: None,
+                                children: vec![],
+                                parent: None
+                            }],
                             parent: None
                         }
                     ],
@@ -474,35 +499,34 @@ mod valid_function {
                     children: vec![
                         Node {
                             kind: NodeKind::FunctionHeader,
-                            children: vec![],
+                            children: vec![Node {
+                                kind: NodeKind::Identifier,
+                                value: Some("main".to_string()),
+                                children: vec![],
+                                parent: None
+                            },],
                             parent: None,
                             value: None,
                         },
                         Node {
                             kind: NodeKind::Block,
                             value: None,
-                            children: vec![
-                                Node {
-                                    kind: NodeKind::StatementList,
+                            children: vec![Node {
+                                kind: NodeKind::StatementList,
+                                value: None,
+                                children: vec![Node {
+                                    kind: NodeKind::Statement,
                                     value: None,
-                                    children: vec![
-                                        Node {
-                                            kind: NodeKind::Statement,
-                                            value: None,
-                                            children: vec![
-                                                Node {
-                                                    kind: NodeKind::Expression,
-                                                    value: Some("1".to_string()),
-                                                    children: vec![],
-                                                    parent: None
-                                                }
-                                            ],
-                                            parent: None
-                                        }
-                                    ],
+                                    children: vec![Node {
+                                        kind: NodeKind::Expression,
+                                        value: Some("1".to_string()),
+                                        children: vec![],
+                                        parent: None
+                                    }],
                                     parent: None
-                                }
-                            ],
+                                }],
+                                parent: None
+                            }],
                             parent: None
                         }
                     ],

@@ -4,6 +4,7 @@ pub enum NodeKind {
     Program,
     Function, 
     FunctionHeader,
+    ParameterList,
     Block,
     StatementList,
     Statement,
