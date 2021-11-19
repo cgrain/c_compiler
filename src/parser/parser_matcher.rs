@@ -18,6 +18,7 @@ fn parse_expression(token_list: &[Token]) -> (Option<Node>, &[Token]) {
                 kind: NodeKind::Expression,
                 parent: None,
                 children: vec![],
+                value: token_list.get(0).unwrap().value.clone(),
             }),
             &token_list[1..],
         );
@@ -44,6 +45,7 @@ fn parse_return_statement(token_list: &[Token]) -> (Option<Node>, &[Token]) {
                     kind: NodeKind::Statement,
                     parent: None,
                     children: vec![expression.unwrap()],
+                    value: None,
                 }),
                 &token_list_ret[1..],
             );
@@ -70,6 +72,7 @@ fn parse_statement_list(token_list: &[Token]) -> (Option<Node>, &[Token]) {
             kind: NodeKind::StatementList,
             parent: None,
             children: statement_list,
+            value: None,
         }),
         token_list_cont,
     );
@@ -96,6 +99,7 @@ fn parse_block(token_list: &[Token]) -> (Option<Node>, &[Token]) {
             kind: NodeKind::Block,
             parent: None,
             children: vec![statement_list.unwrap()],
+            value: None,
         }),
         token_list,
     );
@@ -126,6 +130,7 @@ fn parse_function_header(token_list: &[Token]) -> (Option<Node>, &[Token]) {
         kind: NodeKind::FunctionHeader,
         parent: None,
         children: vec![],
+        value: None,
     }), &token_list_ret[1..]);
 
 }
@@ -144,6 +149,7 @@ fn parse_function(token_list: &[Token]) -> (Option<Node>, &[Token]) {
         Some(Node {
             kind: NodeKind::Function,
             parent: None,
+            value: None,
             children: vec![function_header.unwrap(), block.unwrap()],
         }),
         token_list_ret2,
@@ -160,7 +166,7 @@ pub fn parse_program(token_list: &[Token]) -> Option<Node> {
 }
 #[allow(unused)]
 fn equal_nodes(node1: &Node, node2: &Node) -> bool {
-    if node1.kind == node2.kind && node1.children.len() == node2.children.len() {
+    if node1.kind == node2.kind && node1.children.len() == node2.children.len() && node1.value == node2.value {
         for i in 0..node1.children.len() {
             if !equal_nodes(&node1.children[i], &node2.children[i]) {
                 return false;
@@ -187,6 +193,7 @@ mod valid_expressions {
                 &node.unwrap(),
                 &Node {
                     kind: NodeKind::Expression,
+                    value: Some("1".to_string()),
                     children: vec![],
                     parent: None
                 }
@@ -223,8 +230,10 @@ mod valid_statements {
                 &node.unwrap(),
                 &Node {
                     kind: NodeKind::Statement,
+                    value: None,
                     children: vec![Node {
                         kind: NodeKind::Expression,
+                        value: Some("1".to_string()),
                         children: vec![],
                         parent: None
                     }],
@@ -290,6 +299,7 @@ mod valid_function_header {
                 &node.unwrap(),
                 &Node {
                     kind: NodeKind::FunctionHeader,
+                    value: None,
                     children: vec![],
                     parent: None
                 }
@@ -321,9 +331,11 @@ mod valid_function {
                 &node.unwrap(),
                 &Node {
                     kind: NodeKind::Block,
+                    value: None,
                     children: vec![
                         Node {
                             kind: NodeKind::StatementList,
+                            value: None,
                             children: vec![],
                             parent: None
                         }
@@ -374,17 +386,21 @@ mod valid_function {
                 &node.unwrap(),
                 &Node {
                     kind: NodeKind::Function,
+                    value: None,
                     children: vec![
                         Node {
                             kind: NodeKind::FunctionHeader,
+                            value: None,
                             children: vec![],
                             parent: None
                         },
                         Node {
                             kind: NodeKind::Block,
+                            value: None,
                             children: vec![
                                 Node {
                                     kind: NodeKind::StatementList,
+                                    value: None,
                                     children: vec![],
                                     parent: None
                                 }
@@ -454,23 +470,29 @@ mod valid_function {
                 &node.unwrap(),
                 &Node {
                     kind: NodeKind::Function,
+                    value: None,
                     children: vec![
                         Node {
                             kind: NodeKind::FunctionHeader,
                             children: vec![],
-                            parent: None
+                            parent: None,
+                            value: None,
                         },
                         Node {
                             kind: NodeKind::Block,
+                            value: None,
                             children: vec![
                                 Node {
                                     kind: NodeKind::StatementList,
+                                    value: None,
                                     children: vec![
                                         Node {
                                             kind: NodeKind::Statement,
+                                            value: None,
                                             children: vec![
                                                 Node {
                                                     kind: NodeKind::Expression,
+                                                    value: Some("1".to_string()),
                                                     children: vec![],
                                                     parent: None
                                                 }

@@ -25,5 +25,5 @@ pub struct Node {
     pub kind: NodeKind,
     pub  parent: Option<Box<Node>>,
     pub children: Vec<Node>,
-
+    pub value: Option<String>,
 }
