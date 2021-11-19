@@ -166,7 +166,7 @@ fn parse_identifier(token_list: &[Token]) -> (Option<Node>, &[Token]) {
             kind: NodeKind::Identifier,
             parent: None,
             children: vec![],
-            value: token_list.get(0).unwrap().value.clone(),
+            value: token_list.get(0).unwrap().name.clone(),
         }),
         &token_list[1..],
     );
@@ -299,7 +299,7 @@ mod valid_function_header {
             Token {
                 token_type: TokenType::Identifier,
                 value: Some("main".to_string()),
-                name: None,
+                name: Some("main".to_string()),
             },
             Token {
                 token_type: TokenType::OpenParenthesis,
@@ -379,7 +379,7 @@ mod valid_function {
             Token {
                 token_type: TokenType::Identifier,
                 value: Some("main".to_string()),
-                name: None,
+                name: Some("main".to_string()),
             },
             Token {
                 token_type: TokenType::OpenParenthesis,
@@ -451,7 +451,7 @@ mod valid_function {
             Token {
                 token_type: TokenType::Identifier,
                 value: Some("main".to_string()),
-                name: None,
+                name: Some("main".to_string()),
             },
             Token {
                 token_type: TokenType::OpenParenthesis,

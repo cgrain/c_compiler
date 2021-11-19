@@ -21,7 +21,7 @@ pub enum NodeKind {
 
 }
 
-#[derive(Clone, PartialEq, Eq, Hash, Debug)]
+#[derive(Clone, PartialEq, Eq, Hash, Debug,)]
 pub struct Node {
     pub kind: NodeKind,
     pub  parent: Option<Box<Node>>,
