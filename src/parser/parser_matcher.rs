@@ -150,7 +150,7 @@ fn parse_function(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     );
 }
 
-#[allow(dead_code)]
+#[allow(unused)]
 fn parse_class(_token_list: &[Token]) -> (Option<Node>, &[Token]) {
     todo!();
 }
@@ -158,7 +158,7 @@ pub fn parse_program(token_list: &[Token]) -> Option<Node> {
     let (node, _tokens) = parse_function(token_list);
     return node 
 }
-#[allow(dead_code)]
+#[allow(unused)]
 fn equal_nodes(node1: &Node, node2: &Node) -> bool {
     if node1.kind == node2.kind && node1.children.len() == node2.children.len() {
         for i in 0..node1.children.len() {
