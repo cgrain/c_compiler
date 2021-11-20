@@ -16,7 +16,7 @@ fn parse_primary_expression(token_list: &[Token]) -> (Option<Node>, &[Token]) {
             ..
         }) => {
             node_primary = Some(Node {
-                kind: NodeKind::Expression,
+                kind: NodeKind::Literal,
                 parent: None,
                 children: vec![],
                 value: v.clone(),
@@ -216,6 +216,7 @@ pub fn parse_unary_operator(token_list: &[Token]) -> (Option<Node>, &[Token]) {
                 unimplemented!();
             }
             TokenType::Plus => {
+                // Not useful, (Unary plus), low priority.
                 unimplemented!();
             }
             TokenType::Increment => {
@@ -232,5 +233,80 @@ pub fn parse_unary_operator(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     },
 
         _ => return (None, token_list),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn unary_expression() {
+        let tokens = vec![
+            Token {
+                token_type: TokenType::Minus,
+                name: None,
+                value: None,
+            },
+            Token {
+                token_type: TokenType::IntegerLiteral,
+                name: None,
+                value: Some("1".to_string()),
+            },
+        ];
+        let (node, rest) = parse_unary_operator(&tokens);
+        assert_eq!(
+            node,
+            Some(Node {
+                kind: NodeKind::UnaryOperator,
+                parent: None,
+                children: vec![Node {
+                    kind: NodeKind::Literal,
+                    parent: None,
+                    children: vec![],
+                    value: Some("1".to_string()),
+                }],
+                value: Some("-".to_string()),
+            })
+        );
+    }
+    #[test]
+    fn unary_is_recursive() {
+        let tokens = vec![
+            Token {
+                token_type: TokenType::Minus,
+                name: None,
+                value: None,
+            },
+            Token {
+                token_type: TokenType::Minus,
+                name: None,
+                value: None,
+            },
+            Token {
+                token_type: TokenType::IntegerLiteral,
+                name: None,
+                value: Some("1".to_string()),
+            },
+        ];
+        let (node, rest) = parse_unary_operator(&tokens);
+        assert_eq!(
+            node,
+            Some(Node {
+                kind: NodeKind::UnaryOperator,
+                parent: None,
+                children: vec![Node {
+                    kind: NodeKind::UnaryOperator,
+                    parent: None,
+                    children: vec![Node {
+                        kind: NodeKind::Literal,
+                        parent: None,
+                        children: vec![],
+                        value: Some("1".to_string()),
+                    }],
+                    value: Some("-".to_string()),
+                }],
+                value: Some("-".to_string()),
+            })
+        );
     }
 }

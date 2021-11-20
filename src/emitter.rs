@@ -14,14 +14,14 @@ fn emit_expression(expression_node: &Node) -> String {
 fn emit_integer_literal(integer_literal_node: &Node) -> String {
     match &integer_literal_node {
         Node {
-            kind: NodeKind::Expression,
+            kind: NodeKind::Literal,
             value: Some(value),
             ..
         } => {
             return format!("    mov ${}, %rax \n", value);
         }
         Node { 
-            kind: NodeKind::Expression,
+            kind: NodeKind::Literal,
             .. 
         } => {
             panic!("integer_literal_node.value is None");
@@ -127,7 +127,7 @@ mod tests {
     #[test]
     fn test_emit_expression() {
         let expression_node = Node {
-            kind: NodeKind::Expression,
+            kind: NodeKind::Literal,
             children: vec![],
             value: Some("42".to_string()),
             parent: None,
@@ -138,7 +138,7 @@ mod tests {
     #[test]
     fn test_emit_integer_literal() {
         let integer_literal_node = Node {
-            kind: NodeKind::Expression,
+            kind: NodeKind::Literal,
             children: vec![],
             value: Some("42".to_string()),
             parent: None,
@@ -152,7 +152,7 @@ mod tests {
             kind: NodeKind::Statement,
             children: vec![
                 Node {
-                    kind: NodeKind::Expression,
+                    kind: NodeKind::Literal,
                     children: vec![],
                     value: Some("42".to_string()),
                     parent: None,
@@ -209,7 +209,7 @@ mod tests {
                             kind: NodeKind::Statement,
                             value: None,
                             children: vec![Node {
-                                kind: NodeKind::Expression,
+                                kind: NodeKind::Literal,
                                 value: Some("42".to_string()),
                                 children: vec![],
                                 parent: None

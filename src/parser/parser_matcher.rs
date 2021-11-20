@@ -203,7 +203,7 @@ mod valid_expressions {
             equal_nodes(
                 &node.unwrap(),
                 &Node {
-                    kind: NodeKind::Expression,
+                    kind: NodeKind::Literal,
                     value: Some("1".to_string()),
                     children: vec![],
                     parent: None
@@ -243,7 +243,7 @@ mod valid_statements {
                     kind: NodeKind::Statement,
                     value: None,
                     children: vec![Node {
-                        kind: NodeKind::Expression,
+                        kind: NodeKind::Literal,
                         value: Some("1".to_string()),
                         children: vec![],
                         parent: None
@@ -510,7 +510,7 @@ mod valid_function {
                                     kind: NodeKind::Statement,
                                     value: None,
                                     children: vec![Node {
-                                        kind: NodeKind::Expression,
+                                        kind: NodeKind::Literal,
                                         value: Some("1".to_string()),
                                         children: vec![],
                                         parent: None
