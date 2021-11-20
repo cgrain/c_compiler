@@ -1,3 +1,4 @@
+#[allow(unused)]
 #[derive(PartialEq, Debug, Clone)]
 pub enum TokenType {
     OpenBrace,
@@ -10,6 +11,29 @@ pub enum TokenType {
     Identifier,
     IntegerLiteral,
     WhiteSpace,
+    Plus,
+    Minus,
+    Star,
+    Slash,
+    BitwiseNot,
+    BitwiseAnd,
+    BitwiseOr,
+    BitwiseXor,
+    BitwiseLeftShift,
+    BitwiseRightShift,
+    BitwiseRightRotate,
+    BitwiseLeftRotate,
+    Equal,
+    NotEqual,
+    LessThan,
+    LessThanOrEqual,
+    GreaterThan,
+    GreaterThanOrEqual,
+    Not,
+    Ampersand,
+    Increment,
+    Decrement,
+
 }
 
 #[derive(PartialEq, Debug, Clone)]
