@@ -33,6 +33,48 @@ fn emit_integer_literal(integer_literal_node: &Node) -> String {
         }
     }
 }
+
+fn emit_unary_node(unary_node: &Node) -> String {
+    match &unary_node {
+        Node {
+            kind: NodeKind::UnaryOperator,
+            value: Some(v),
+            ..
+        } => {
+            let expr = emit_expression(&unary_node.children[0]);
+            match v.as_str()  { 
+                "-" => 
+                    return format!("{}    neg %rax", expr),
+                
+                "~" => 
+                    return format!("{}    not %rax", expr),
+                
+                "!" => {
+                    let not = format!("    cmp $0, %rax\n    mov $0, %rax\n    sete %al");
+                    return format!("{}{}", expr, not);
+                },
+                _ => {
+                    panic!("unexpected unary_node.value: {:?}", v);
+                }
+            }
+        }
+        Node { 
+            kind: NodeKind::UnaryOperator,
+            .. 
+        } => {
+            panic!("unary_node.value is None");
+        }
+        Node { 
+            kind: NodeKind::Literal, 
+            ..
+        } => return emit_integer_literal(unary_node),
+        _ => {
+
+            panic!("unexpected node: {:?} ", unary_node.kind);
+            
+        }
+    }
+}
 fn emit_statement(statement_node: &Node) -> String {
     // Only Return (for now)
     match &statement_node.kind {
@@ -52,6 +94,8 @@ fn emit_declaration(declaration_node: &Node) -> String {
 fn emit_type(type_node: &Node) -> String {
     return "".to_string();
 }
+
+
 fn emit_block(block_node: &Node) -> String {
     match &block_node.kind {
         NodeKind::Block => {
@@ -65,6 +109,8 @@ fn emit_block(block_node: &Node) -> String {
         }
     }
 }
+
+
 fn emit_statement_list(block_node: &Node) -> String {
     let mut result = "".to_string();
     for statement_node in block_node.children.iter() {
@@ -96,6 +142,8 @@ fn emit_function(function_node: &Node) -> String {
     );
     return result
 }
+
+
 fn emit_functionheader(functionheader_node: &Node) -> String {
     match functionheader_node {
         Node { 
@@ -110,6 +158,8 @@ fn emit_functionheader(functionheader_node: &Node) -> String {
         }
     }
 }
+
+
 pub fn emit_function_ident(identifier_node: &Node, globl: bool ) -> String {
     let ident_name = &identifier_node.value.as_ref().unwrap().clone();
     if globl {
