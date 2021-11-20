@@ -26,14 +26,10 @@ fn emit_integer_literal(integer_literal_node: &Node) -> String {
         } => {
             panic!("integer_literal_node.value is None");
         }
-        Node => {
+        _ => {
 
             panic!("unexpected node: {:?} ", integer_literal_node.kind);
             
-        }
-        _ => {
-            panic!("Not a noDE ");
-           
         }
     }
 }
@@ -48,7 +44,6 @@ fn emit_statement(statement_node: &Node) -> String {
             panic!("statement_node.kind is not Return");
         }
     }
-    return "".to_string();
 }
 #[allow(unused)]
 fn emit_declaration(declaration_node: &Node) -> String {
@@ -69,7 +64,6 @@ fn emit_block(block_node: &Node) -> String {
             panic!("block_node.kind is not Block");
         }
     }
-    return "".to_string();
 }
 fn emit_statement_list(block_node: &Node) -> String {
     let mut result = "".to_string();
@@ -82,9 +76,7 @@ fn emit_statement_list(block_node: &Node) -> String {
 
 
 fn emit_function(function_node: &Node) -> String {
-    let mut result = "".to_string();
     let mut function_name = "".to_string();
-    let mut function_args = "".to_string();
     let mut function_body = "".to_string();
     for child in function_node.children.iter() {
         match &child.kind {
@@ -99,7 +91,7 @@ fn emit_function(function_node: &Node) -> String {
             }
         }
     }
-    result = format!(
+    let result = format!(
         "{} {}", function_name, function_body
     );
     return result
@@ -128,22 +120,10 @@ pub fn emit_function_ident(identifier_node: &Node, globl: bool ) -> String {
 }
 
 
-pub fn emit_test(prgoram_node: Node) {
-    let answer_to_all_the_questions_asm = " 
-    .globl main
-    main:
-    mov rax, 42
-    ret
-    ";
-    println!("{}", answer_to_all_the_questions_asm);
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::parser::parser_nodes::{Node, NodeKind};
-    use crate::lexer::lexer_types::{Token};
-
     #[test]
     fn test_emit_expression() {
         let expression_node = Node {
