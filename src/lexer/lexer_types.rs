@@ -33,6 +33,8 @@ pub enum TokenType {
     Ampersand,
     Increment,
     Decrement,
+    StringLiteral,
+    Keyword,
 
 }
 
