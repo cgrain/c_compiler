@@ -14,6 +14,9 @@ fn parse_primary_expression(token_list: &[Token]) -> (Option<Node>, &[Token]) {
         Some( Token { token_type: TokenType::Identifier, name: n, ..}) => {
             unimplemented!();
         }
+        Some( Token { token_type: TokenType::OpenParenthesis, ..}) => { 
+            return parse_expression_in_brackets(token_list);
+        }
         _ => {
             return (None, token_list);
         }
