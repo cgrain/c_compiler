@@ -18,6 +18,7 @@ pub enum NodeKind {
     Whitespace,
     Comment,
     Unknown,
+    UnaryOperator,
 
 }
 

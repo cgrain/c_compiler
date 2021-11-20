@@ -1,3 +1,5 @@
+use super::parser_match_expression;
+
 use super::parser_nodes::*;
 use crate::lexer::lexer_types::*;
 
@@ -9,20 +11,7 @@ fn match_token(token_list: &[Token], match_token_type: TokenType) -> bool {
 }
 
 fn parse_expression(token_list: &[Token]) -> (Option<Node>, &[Token]) {
-    // <Expression> := int
-    if match_token(token_list, TokenType::IntegerLiteral) {
-        return (
-            Some(Node {
-                kind: NodeKind::Expression,
-                parent: None,
-                children: vec![],
-                value: token_list.get(0).unwrap().value.clone(),
-            }),
-            &token_list[1..],
-        );
-    } else {
-        return (None, token_list);
-    }
+    return parser_match_expression::parse_expression(token_list);
 }
 fn parse_statement(token_list: &[Token]) -> (Option<Node>, &[Token]) {
     return parse_return_statement(token_list);
@@ -195,6 +184,9 @@ fn equal_nodes(node1: &Node, node2: &Node) -> bool {
     }
     return false;
 }
+
+
+
 
 #[cfg(test)]
 mod valid_expressions {
