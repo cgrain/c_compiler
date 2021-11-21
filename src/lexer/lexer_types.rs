@@ -35,6 +35,7 @@ pub enum TokenType {
     Decrement,
     StringLiteral,
     Keyword,
+    Percent,
 
 }
 
