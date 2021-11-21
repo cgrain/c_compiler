@@ -19,7 +19,7 @@ pub enum NodeKind {
     Comment,
     Unknown,
     UnaryOperator,
-
+    BinaryOperator,
 }
 
 #[derive(Clone, PartialEq, Eq, Hash, Debug,)]
