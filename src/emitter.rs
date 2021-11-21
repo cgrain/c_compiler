@@ -8,7 +8,7 @@ pub fn emit_program(program_node: &Node) -> String {
     return emit_function(program_node)
 }
 fn emit_expression(expression_node: &Node) -> String {
-    return emit_integer_literal(expression_node);
+    return emit_unary_operator(expression_node);
 }
 
 fn emit_integer_literal(integer_literal_node: &Node) -> String {
@@ -34,7 +34,7 @@ fn emit_integer_literal(integer_literal_node: &Node) -> String {
     }
 }
 
-fn emit_unary_node(unary_node: &Node) -> String {
+fn emit_unary_operator(unary_node: &Node) -> String {
     match &unary_node {
         Node {
             kind: NodeKind::UnaryOperator,
@@ -44,10 +44,10 @@ fn emit_unary_node(unary_node: &Node) -> String {
             let expr = emit_expression(&unary_node.children[0]);
             match v.as_str()  { 
                 "-" => 
-                    return format!("{}    neg %rax", expr),
+                    return format!("{}    neg %rax \n", expr),
                 
                 "~" => 
-                    return format!("{}    not %rax", expr),
+                    return format!("{}    not %rax \n", expr),
                 
                 "!" => {
                     let not = format!("    cmp $0, %rax\n    mov $0, %rax\n    sete %al");
@@ -276,6 +276,24 @@ mod tests {
         let result = emit_function(&function_node);
         println!("{}",&result);
         assert_eq!(result, "    .globl main\n main:\n     mov $42, %rax \n    ret\n".to_string());
+    }
+    #[test]
+    fn test_emit_unary_operator() { 
+        let unary_operator_node = Node {
+            kind: NodeKind::UnaryOperator,
+            value: Some("-".to_string()),
+            children: vec![
+                Node {
+                    kind: NodeKind::Literal,
+                    value: Some("42".to_string()),
+                    children: vec![],
+                    parent: None
+                },
+            ],
+            parent: None,
+        };
+        let result = emit_unary_operator(&unary_operator_node);
+        assert_eq!(result, "    mov $42, %rax \n    neg %rax \n".to_string());
     }
 
 }
